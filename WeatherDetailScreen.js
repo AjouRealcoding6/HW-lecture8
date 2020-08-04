@@ -1,8 +1,8 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, View, Text } from 'react-native';
 import Constants from 'expo-constants';
 
-const API_KEY = 'c456f4d7facffa58639bcb7740aca64b';
+const API_KEY = '365e807154ee40fe752a0bffa0474083';
 const queryUrl = (city) => `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
 
 export default class WeatherDetailScreen extends React.Component {
@@ -40,6 +40,24 @@ export default class WeatherDetailScreen extends React.Component {
       )
   }
 
+    renderWeatherCondition() {
+      // https://openweathermap.org/weather-conditions
+      return this.state.weather.map(({
+        icon,
+      }, index) => {
+        return (
+          <View key={index}>
+            <Image source={{
+              uri: `http://openweathermap.org/img/wn/${icon}@2x.png`,
+              width: 72,
+              height: 72
+            }} />
+          </View>
+        );
+      });
+    }
+
+
   render() {
     const {
       route: {
@@ -48,7 +66,7 @@ export default class WeatherDetailScreen extends React.Component {
       navigation,
     } = this.props;
 
-    navigation.setOptions({ title: `Weather Information: ${city}` });
+    navigation.setOptions({ title: `${city} 날씨` });
 
     if (this.state.isLoading) {
       return (
@@ -61,6 +79,9 @@ export default class WeatherDetailScreen extends React.Component {
     return (
       <View style={styles.container}>
         {this.renderTemperature()}
+        <View style={styles.conditionContainer}>
+          {this.renderWeatherCondition()}
+        </View>
       </View>
     );
   }
@@ -73,4 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  conditionContainer: {
+    flexDirection: 'row',
+  }
 });
