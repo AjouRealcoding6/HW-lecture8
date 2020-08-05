@@ -6,10 +6,10 @@ const {
     region,
 } = Constants.manifest.extra.openWeatherApi;
 
-
 class OpenWeatherApi {
     fetchWeatherInfoByCityName = cityName => {
         const url = `${baseUrl}/weather?q=${cityName}&appid=${apiKey}&lang=${region}`
+
         return fetch(url)
             .then(response => response.json());
     }

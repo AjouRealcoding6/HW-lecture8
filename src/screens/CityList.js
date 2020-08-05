@@ -13,11 +13,11 @@ export default class CityList extends React.Component {
 
   componentDidMount() {
     cityListApi.fetchAvailableCities()
-      .then(cities => {
-        this.setState({
-          cities
+        .then(cities => {
+          this.setState({
+            cities
+          });
         });
-      });
   }
 
   onPressCity(item) {
@@ -29,20 +29,20 @@ export default class CityList extends React.Component {
 
   renderItem(city) {
     return (
-      <TouchableOpacity style={styles.item} onPress={() => this.onPressCity(city)}>
-        <Text style={styles.text}>{city}</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.item} onPress={() => this.onPressCity(city)}>
+          <Text style={styles.text}>{city}</Text>
+        </TouchableOpacity>
     );
   }
 
   render() {
     return (
-      <FlatList style={styles.container}
-                numColumns={3}
-                renderItem={({ item }) => this.renderItem(item)}
-                keyExtractor={item => item}
-                data={this.state.cities}
-      />
+        <FlatList style={styles.container}
+                  numColumns={3}
+                  renderItem={({ item }) => this.renderItem(item)}
+                  keyExtractor={item => item}
+                  data={this.state.cities}
+        />
     );
   }
 }
@@ -56,9 +56,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     justifyContent: 'center',
-
-    borderWidth: 1,
-    borderColor: 'orange',
   },
   text: {
     fontSize: 14,
