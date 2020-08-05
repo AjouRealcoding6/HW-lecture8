@@ -1,9 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, Image, StyleSheet, View, Text } from 'react-native';
-import Constants from 'expo-constants';
-
-const API_KEY = '365e807154ee40fe752a0bffa0474083';
-const queryUrl = (city) => `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+import openWeatherApi from '../api/OpenWeatherApi';
 
 export default class WeatherDetailScreen extends React.Component {
   constructor(props) {
@@ -15,37 +12,32 @@ export default class WeatherDetailScreen extends React.Component {
   }
 
   componentDidMount() {
-    const {
-      route: {
-        params: { city },
-      },
-    } = this.props;
+    this.setState({ isLoading: true });
 
-    fetch(queryUrl(city))
-      .then(response => response.json())
-      .then(info => {
-        console.log(info);
-        this.setState({
-          ...info,
-          isLoading: false,
+    openWeatherApi.fetchWeatherInfoByCityName(this.props.route.params.city)
+        .then(info => {
+          console.log(info);
+          this.setState({
+            ...info,
+            isLoading: false,
+          });
         });
-      });
   }
 
   renderTemperature() {
-      const celsius = this.state.main.temp - 273.15;
+    const celsius = this.state.main.temp - 273.15;
 
-      return (
+    return (
         <Text>온도: {celsius.toFixed(1)}</Text>
-      )
+    )
   }
 
-    renderWeatherCondition() {
-      // https://openweathermap.org/weather-conditions
-      return this.state.weather.map(({
-        icon,
-      }, index) => {
-        return (
+  renderWeatherCondition() {
+    // https://openweathermap.org/weather-conditions
+    return this.state.weather.map(({
+                                     icon,
+                                   }, index) => {
+      return (
           <View key={index}>
             <Image source={{
               uri: `http://openweathermap.org/img/wn/${icon}@2x.png`,
@@ -53,10 +45,9 @@ export default class WeatherDetailScreen extends React.Component {
               height: 72
             }} />
           </View>
-        );
-      });
-    }
-
+      );
+    });
+  }
 
   render() {
     const {
@@ -70,23 +61,22 @@ export default class WeatherDetailScreen extends React.Component {
 
     if (this.state.isLoading) {
       return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" />
-        </View>
+          <View style={styles.container}>
+            <ActivityIndicator size="large" />
+          </View>
       )
     }
 
     return (
-      <View style={styles.container}>
-        {this.renderTemperature()}
-        <View style={styles.conditionContainer}>
-          {this.renderWeatherCondition()}
+        <View style={styles.container}>
+          {this.renderTemperature()}
+          <View style={styles.conditionContainer}>
+            {this.renderWeatherCondition()}
+          </View>
         </View>
-      </View>
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
