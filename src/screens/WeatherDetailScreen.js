@@ -28,7 +28,7 @@ export default class WeatherDetailScreen extends React.Component {
         const celsius = this.state.main.temp - 273.15;
 
         return (
-            <Text>온도: {celsius.toFixed(1)}</Text>
+            <Text style = {styles.text}>온도: {celsius.toFixed(1)}</Text>
         )
     }
 
@@ -41,8 +41,8 @@ export default class WeatherDetailScreen extends React.Component {
                 <View key={index}>
                     <Image source={{
                         uri: `http://openweathermap.org/img/wn/${icon}@2x.png`,
-                        width: 72,
-                        height: 72
+                        width: 160,
+                        height: 160,
                     }} />
                 </View>
             );
@@ -81,11 +81,14 @@ export default class WeatherDetailScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#8888FF',
+        backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
     },
+    text: {
+        fontSize: 30,
+    },
     conditionContainer: {
         flexDirection: 'row',
-    }
+    },
 });
